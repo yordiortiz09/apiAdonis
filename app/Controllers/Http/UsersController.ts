@@ -4,6 +4,7 @@ import { schema, rules } from "@ioc:Adonis/Core/Validator";
 import Hash from "@ioc:Adonis/Core/Hash";
 import { HttpContextContract } from "@ioc:Adonis/Core/HttpContext";
 
+
 export default class UsersController {
   public async crearusuario({ request, response }: HttpContext) {
     const validationSchema = schema.create({
@@ -78,61 +79,52 @@ export default class UsersController {
   }
 
 
-   public async login({ request, response, auth }: HttpContextContract) {
-     const validationSchema = schema.create({
-       email: schema.string({ trim: true }, [rules.email()]),
-       password: schema.string({ trim: true }, [
-         rules.minLength(8),
-         rules.maxLength(50),
-       ]),
-     })
-
-     try {
-       const data = await request.validate({
-         schema: validationSchema,
-         messages: {
-           'email.required': 'El email es requerido',
-           'email.string': 'El email debe ser un texto',
-           'email.email': 'El email debe ser un email válido',
-
-           'password.required': 'La contraseña es requerida',
-           'password.string': 'La contraseña debe ser un texto',
-           'password.minLength': 'La contraseña debe tener al menos 8 caracteres',
-           'password.maxLength': 'La contraseña debe tener como máximo 50 caracteres',
-         },
-       })
-
-       const { email, password } = data
-
-       const user = await User.findByOrFail('email', email)
-
-       if (!(await Hash.verify(user.password, password))) {
-         return response.status(400).json({
-           message: 'Email o contraseña incorrectos',
-           data: null,
-         })
-       }
-
-       try {
-         const token = await auth.use('api').generate(user)
-         return response.status(200).json({
-           message: 'Inicio de sesión exitoso',
-           user: user,
-           token: token.token,
-         })
-       } catch (error) {
-         return response.status(400).json({
-           message: 'Error al iniciar sesión',
-           data: error,
-         })
-       }
-     } catch (error) {
-       return response.status(400).json({
-         message: 'Error al iniciar sesión',
-         data: error,
-       })
-     }
-   }
+  public async login({ request, response, auth }: HttpContextContract) {
+    try {
+      const { email, password } = await request.validate({
+        schema: schema.create({
+          email: schema.string({}, [
+            rules.required(),
+            rules.email(),
+          ]),
+          password: schema.string({}, [
+            rules.required(),
+            rules.minLength(8),
+            rules.maxLength(50),
+          ]),
+        }),
+        messages: {
+          'email.required': 'El email es requerido',
+          'email.email': 'El email debe ser un email válido',
+          'password.required': 'La contraseña es requerida',
+          'password.minLength': 'La contraseña debe tener al menos 8 caracteres',
+          'password.maxLength': 'La contraseña debe tener como máximo 50 caracteres',
+        },
+      })
+  
+      const user = await User.findByOrFail('email', email)
+  
+      const isPasswordValid = await Hash.verify(user.password, password)
+      if (!isPasswordValid) {
+        return response.status(400).json({
+          message: 'Email o contraseña incorrectos',
+          data: null,
+        })
+      }
+  
+      const token = await auth.use('api').generate(user)
+  
+      return response.status(200).json({
+        message: 'Inicio de sesión exitoso',
+        user,
+        token: token.token,
+      })
+    } catch (error) {
+      return response.status(400).json({
+        message: 'Error al iniciar sesión',
+        data: error,
+      })
+    }
+  }
+  
 }
-
-
