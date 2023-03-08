@@ -19,6 +19,7 @@
 */
 
 import Route from '@ioc:Adonis/Core/Route'
+import UsersController from 'App/Controllers/Http/UsersController'
 
 Route.get('/', async () => {
   return { hello: 'world' }
@@ -26,6 +27,8 @@ Route.get('/', async () => {
 
 Route.group(() => {
   Route.get('/users', 'UsersController.index')
+  Route.post('/login', 'UsersController.login')
+  
   Route.post('/users', 'UsersController.crearusuario')
   Route.get('/users/:id', 'UsersController.mostrarusuario')
   Route.put('/users/:id', 'UsersController.actualizarusuario')
