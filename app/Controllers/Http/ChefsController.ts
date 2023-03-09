@@ -170,4 +170,26 @@ export default class ChefsController {
       });
     }
   }
+  public async delete({ response, params }) {
+    const chef = await Chef.find(params.id);
+
+    if (!chef) {
+      return response.status(404).json({
+        status: 404,
+        msg: "Chef no encontrado",
+        error: null,
+        data: null,
+      });
+    }
+
+    chef.status = 0;
+    await chef.save();
+
+    return response.status(200).json({
+      status: 200,
+      msg: "Se ha eliminado correctamente",
+      error: null,
+      data: chef,
+    });
+  }
 }

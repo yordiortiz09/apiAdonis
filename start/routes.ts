@@ -46,5 +46,8 @@ Route.group(() => {
 ////////Chef////////
 Route.group(() => {
   Route.post('/create', 'ChefsController.create').middleware('auth')
+  Route.get('/info', 'ChefsController.getChefs')
+  Route.get('/info/:id', 'ChefsController.chefInfo')
   Route.put('/update/:id', 'ChefsController.update').middleware('auth')
+  Route.delete('/delete/:id', 'ChefsController.delete').middleware('auth')
 }).prefix('/chef')
