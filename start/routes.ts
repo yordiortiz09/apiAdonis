@@ -29,7 +29,7 @@ Route.group(() => {
   Route.post('/login', 'UsersController.login')
   Route.delete('/logout', 'UsersController.logout').middleware('auth')
 
-  Route.get('/user/:id', 'UsersController.info')
+  Route.get('/user/:id', 'UsersController.info').middleware('auth')
   Route.get('/users', 'UsersController.getUsers')
 
   Route.get('/role', 'UsersController.getRole').middleware('auth')
@@ -46,11 +46,11 @@ Route.group(() => {
 ////////Chef////////
 Route.group(() => {
   Route.post('/create', 'ChefsController.create').middleware('auth')
-  Route.get('/info', 'ChefsController.getChefs')
+  Route.get('/info', 'ChefsController.getChefs').middleware('roles:1,2,3')
   Route.get('/info/:id', 'ChefsController.chefInfo')
   Route.put('/update/:id', 'ChefsController.update').middleware('auth')
   Route.delete('/delete/:id', 'ChefsController.delete').middleware('auth')
-}).prefix('/chef')
+}).prefix('/chef').middleware('auth')
 
 ////////Platillo////////
 Route.group(() => {
@@ -81,3 +81,33 @@ Route.group(() => {
   Route.delete('/delete/:id', 'RecetasController.delete').middleware('auth')
 }
 ).prefix('/receta')
+
+/////////Conductor//////////
+Route.group(() => {
+  Route.post('/create', 'ConductorsController.create').middleware('auth')
+  Route.get('/info', 'ConductorsController.getConductores')
+  Route.get('/info/:id', 'ConductorsController.getConductor')
+  Route.put('/update/:id', 'ConductorsController.update').middleware('auth')
+  Route.delete('/delete/:id', 'ConductorsController.delete').middleware('auth')
+} 
+).prefix('/conductor')
+
+///////Avion////////
+Route.group(() => {
+  Route.post('/create', 'AvionesController.create').middleware('auth')
+  Route.get('/info', 'AvionesController.getAvions')
+  Route.get('/info/:id', 'AvionesController.getAvion')
+  Route.put('/update/:id', 'AvionesController.update').middleware('auth')
+  Route.delete('/delete/:id', 'AvionesController.delete').middleware('auth')
+}
+).prefix('/avion')
+
+///////Seguros////////
+Route.group(() => {
+  Route.post('/create', 'SegurosController.create').middleware('auth')
+  Route.get('/info', 'SegurosController.getSeguros')
+  Route.get('/info/:id', 'SegurosController.getSeguro')
+  Route.put('/update/:id', 'SegurosController.update').middleware('auth')
+  Route.delete('/delete/:id', 'SegurosController.delete').middleware('auth')
+}
+).prefix('/seguro')

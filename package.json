@@ -23,9 +23,12 @@
     "@adonisjs/auth": "^8.2.3",
     "@adonisjs/core": "^5.9.0",
     "@adonisjs/lucid": "^18.3.0",
+    "@adonisjs/mail": "^8.1.2",
     "@adonisjs/repl": "^3.1.11",
+    "@sendinblue/client": "^3.3.1",
     "luxon": "^3.3.0",
     "mysql2": "^3.2.0",
+    "nodemailer": "^6.9.1",
     "proxy-addr": "^2.0.7",
     "reflect-metadata": "^0.1.13",
     "source-map-support": "^0.5.21"
