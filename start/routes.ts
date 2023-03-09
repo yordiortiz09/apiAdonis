@@ -111,3 +111,13 @@ Route.group(() => {
   Route.delete('/delete/:id', 'SegurosController.delete').middleware('auth')
 }
 ).prefix('/seguro')
+
+///////Hospitals/////////
+Route.group(() => {
+  Route.post('/create', 'HospitalsController.create').middleware('auth')
+  Route.get('/info', 'HospitalsController.getHospitals')
+  Route.get('/info/:id', 'HospitalsController.getHospital')
+  Route.put('/update/:id', 'HospitalsController.update').middleware('auth')
+  Route.delete('/delete/:id', 'HospitalsController.delete').middleware('auth')
+}
+).prefix('/hospital')
