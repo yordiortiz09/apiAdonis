@@ -127,6 +127,7 @@ export default class UsersController {
       });
     }
   }
+ 
   public async logout({ response, auth }: HttpContextContract) {
     try {
       await auth.use("api").revoke();
@@ -143,6 +144,7 @@ export default class UsersController {
       });
     }
   }
+  
   public async info({ response, params }) {
     try {
       const user = await Database.from("users")
@@ -156,16 +158,6 @@ export default class UsersController {
     }
   }
 
-  public async users({ response }) {
-    try {
-      const user = await Database.from("users").firstOrFail();
-      return response.status(200).json(user);
-    } catch (error) {
-      return response.status(404).json({
-        error: "Usuario no encontrado",
-      });
-    }
-  }
   public async getUsers({ response }) {
     const users = await User.all();
     return response.json(users);
