@@ -207,6 +207,7 @@ export default class UsersController {
       .status(200)
       .json({ message: "Rol actualizado correctamente" });
   }
+
   public async updateStatus({ request, response, params }) {
     const { id } = params;
     const user = await User.findOrFail(id);
@@ -217,6 +218,7 @@ export default class UsersController {
       user: user,
     });
   }
+  
   public async destroy({ params, response }) {
     try {
       const user = await User.findOrFail(params.id);
