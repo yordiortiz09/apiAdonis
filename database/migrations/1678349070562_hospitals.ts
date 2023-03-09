@@ -6,8 +6,8 @@ export default class extends BaseSchema {
   public async up () {
     this.schema.createTable(this.tableName, (table) => {
       table.increments('id').primary()
-      table.integer('no_de_seguro');
-      table.foreign('no_de_seguro').references('id').inTable('seguros').onDelete('CASCADE')
+      table.integer('no_de_seguro').unsigned().references('id').inTable('seguros').onDelete('CASCADE')
+
       table.integer('numero_de_seo');
       table.string('nombre_del_hospital',100)
       table.boolean('status').notNullable().defaultTo(1)
