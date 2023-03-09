@@ -5,8 +5,9 @@ import Hash from "@ioc:Adonis/Core/Hash";
 import { HttpContextContract } from "@ioc:Adonis/Core/HttpContext";
 
 
+
 export default class UsersController {
-  public async crearusuario({ request, response }: HttpContext) {
+  public async registrar({ request, response }: HttpContext) {
     const validationSchema = schema.create({
       name: schema.string({ trim: true, escape: true }, [
         rules.required(),
@@ -90,15 +91,16 @@ export default class UsersController {
           password: schema.string({}, [
             rules.required(),
             rules.minLength(8),
-            rules.maxLength(50),
+            rules.maxLength(180),
           ]),
         }),
         messages: {
           'email.required': 'El email es requerido',
           'email.email': 'El email debe ser un email válido',
+
           'password.required': 'La contraseña es requerida',
           'password.minLength': 'La contraseña debe tener al menos 8 caracteres',
-          'password.maxLength': 'La contraseña debe tener como máximo 50 caracteres',
+          'password.maxLength': 'La contraseña debe tener como máximo 180 caracteres',
         },
       })
   
@@ -116,7 +118,9 @@ export default class UsersController {
   
       return response.status(200).json({
         message: 'Inicio de sesión exitoso',
-        user,
+        id : user.id,
+        email : user.email,
+        rol_id : user.rol_id,
         token: token.token,
       })
     } catch (error) {
@@ -126,5 +130,23 @@ export default class UsersController {
       })
     }
   }
-  
+  public async logout({ response, auth }: HttpContextContract)
+  {
+      try {
+          await auth.use('api').revoke();
+          return response.status(200).json({
+              message: 'Sesión cerrada correctamente',
+              data: null,
+              revoked: true,
+          });
+      }
+      catch (error) {
+        console.error(error);
+          return response.status(400).json({
+              message: 'Error al cerrar sesión',
+              data: error,
+          });
+      }
+
+  } 
 }
