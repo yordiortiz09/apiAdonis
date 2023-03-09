@@ -45,79 +45,79 @@ Route.group(() => {
 
 ////////Chef////////
 Route.group(() => {
-  Route.post('/create', 'ChefsController.create').middleware('auth')
+  Route.post('/create', 'ChefsController.create').middleware('roles:1,2')
   Route.get('/info', 'ChefsController.getChefs').middleware('roles:1,2,3')
-  Route.get('/info/:id', 'ChefsController.chefInfo')
-  Route.put('/update/:id', 'ChefsController.update').middleware('auth')
-  Route.delete('/delete/:id', 'ChefsController.delete').middleware('auth')
+  Route.get('/info/:id', 'ChefsController.chefInfo').middleware('roles:1,2')
+  Route.put('/update/:id', 'ChefsController.update').middleware('roles:1,2')
+  Route.delete('/delete/:id', 'ChefsController.delete').middleware('roles:1,2')
 }).prefix('/chef').middleware('auth')
 
 ////////Platillo////////
 Route.group(() => {
-  Route.post('/create', 'TipoPlatosController.create').middleware('auth')
-  Route.get('/info', 'TipoPlatosController.getTipoPlatos')
-  Route.get('/info/:id', 'TipoPlatosController.tipoPlatoInfo')
-  Route.put('/update/:id', 'TipoPlatosController.update').middleware('auth')
-  Route.delete('/delete/:id', 'TipoPlatosController.delete').middleware('auth')
+  Route.post('/create', 'TipoPlatosController.create').middleware('roles:1,2')
+  Route.get('/info', 'TipoPlatosController.getTipoPlatos').middleware('roles:1,2,3')
+  Route.get('/info/:id', 'TipoPlatosController.tipoPlatoInfo').middleware('roles:1,2')
+  Route.put('/update/:id', 'TipoPlatosController.update').middleware('roles:1,2')
+  Route.delete('/delete/:id', 'TipoPlatosController.delete').middleware('roles:1,2')
 }
-).prefix('/plato')
+).prefix('/plato').middleware('auth')
 
 /////////Ingredientes////////
 Route.group(() => {
-  Route.post('/create', 'IngredientesController.create').middleware('auth')
-  Route.get('/info', 'IngredientesController.getIngredientes')
-  Route.get('/info/:id', 'IngredientesController.getIngrediente')
-  Route.put('/update/:id', 'IngredientesController.update').middleware('auth')
-  Route.delete('/delete/:id', 'IngredientesController.delete').middleware('auth')
+  Route.post('/create', 'IngredientesController.create').middleware('roles:1,2')
+  Route.get('/info', 'IngredientesController.getIngredientes').middleware('roles:1,2,3')
+  Route.get('/info/:id', 'IngredientesController.getIngrediente').middleware('roles:1,2')
+  Route.put('/update/:id', 'IngredientesController.update').middleware('roles:1,2')
+  Route.delete('/delete/:id', 'IngredientesController.delete').middleware('roles:1,2')
 }
-).prefix('/ingrediente')
+).prefix('/ingrediente').middleware('auth')
 
 /////////Receteas////////
 Route.group(() => {
-  Route.post('/create', 'RecetasController.create').middleware('auth')
-  Route.get('/info', 'RecetasController.getRecetas')
-  Route.get('/info/:id', 'RecetasController.getReceta')
-  Route.put('/update/:id', 'RecetasController.update').middleware('auth')
-  Route.delete('/delete/:id', 'RecetasController.delete').middleware('auth')
+  Route.post('/create', 'RecetasController.create').middleware('roles:1,2')
+  Route.get('/info', 'RecetasController.getRecetas').middleware('roles:1,2,3')
+  Route.get('/info/:id', 'RecetasController.getReceta').middleware('roles:1,2')
+  Route.put('/update/:id', 'RecetasController.update').middleware('roles:1,2')
+  Route.delete('/delete/:id', 'RecetasController.delete').middleware('roles:1,2')
 }
-).prefix('/receta')
+).prefix('/receta').middleware('auth')
 
 /////////Conductor//////////
 Route.group(() => {
-  Route.post('/create', 'ConductorsController.create').middleware('auth')
-  Route.get('/info', 'ConductorsController.getConductores')
-  Route.get('/info/:id', 'ConductorsController.getConductor')
-  Route.put('/update/:id', 'ConductorsController.update').middleware('auth')
-  Route.delete('/delete/:id', 'ConductorsController.delete').middleware('auth')
+  Route.post('/create', 'ConductorsController.create').middleware('roles:1,2')
+  Route.get('/info', 'ConductorsController.getConductores').middleware('roles:1,2,3')
+  Route.get('/info/:id', 'ConductorsController.getConductor').middleware('roles:1,2')
+  Route.put('/update/:id', 'ConductorsController.update').middleware('roles:1,2')
+  Route.delete('/delete/:id', 'ConductorsController.delete').middleware('roles:1,2')
 } 
-).prefix('/conductor')
+).prefix('/conductor').middleware('auth')
 
 ///////Avion////////
 Route.group(() => {
-  Route.post('/create', 'AvionesController.create').middleware('auth')
-  Route.get('/info', 'AvionesController.getAvions')
-  Route.get('/info/:id', 'AvionesController.getAvion')
-  Route.put('/update/:id', 'AvionesController.update').middleware('auth')
-  Route.delete('/delete/:id', 'AvionesController.delete').middleware('auth')
+  Route.post('/create', 'AvionesController.create').middleware('roles:1,2')
+  Route.get('/info', 'AvionesController.getAvions').middleware('roles:1,2,3')
+  Route.get('/info/:id', 'AvionesController.getAvion').middleware('roles:1,2')
+  Route.put('/update/:id', 'AvionesController.update').middleware('roles:1,2')
+  Route.delete('/delete/:id', 'AvionesController.delete').middleware('roles:1,2')
 }
-).prefix('/avion')
+).prefix('/avion').middleware('auth')
 
 ///////Seguros////////
 Route.group(() => {
-  Route.post('/create', 'SegurosController.create').middleware('auth')
-  Route.get('/info', 'SegurosController.getSeguros')
-  Route.get('/info/:id', 'SegurosController.getSeguro')
-  Route.put('/update/:id', 'SegurosController.update').middleware('auth')
-  Route.delete('/delete/:id', 'SegurosController.delete').middleware('auth')
+  Route.post('/create', 'SegurosController.create').middleware('roles:1,2')
+  Route.get('/info', 'SegurosController.getSeguros').middleware('roles:1,2,3')
+  Route.get('/info/:id', 'SegurosController.getSeguro').middleware('roles:1,2')
+  Route.put('/update/:id', 'SegurosController.update').middleware('roles:1,2')
+  Route.delete('/delete/:id', 'SegurosController.delete').middleware('roles:1,2')
 }
-).prefix('/seguro')
+).prefix('/seguro').middleware('auth')
 
 ///////Hospitals/////////
 Route.group(() => {
-  Route.post('/create', 'HospitalsController.create').middleware('auth')
-  Route.get('/info', 'HospitalsController.getHospitals')
-  Route.get('/info/:id', 'HospitalsController.getHospital')
-  Route.put('/update/:id', 'HospitalsController.update').middleware('auth')
-  Route.delete('/delete/:id', 'HospitalsController.delete').middleware('auth')
+  Route.post('/create', 'HospitalsController.create').middleware('roles:1,2')
+  Route.get('/info', 'HospitalsController.getHospitals').middleware('roles:1,2,3')
+  Route.get('/info/:id', 'HospitalsController.getHospital').middleware('roles:1,2')
+  Route.put('/update/:id', 'HospitalsController.update').middleware('roles:1,2')
+  Route.delete('/delete/:id', 'HospitalsController.delete').middleware('roles:1,2')
 }
-).prefix('/hospital')
+).prefix('/hospital').middleware('auth')
