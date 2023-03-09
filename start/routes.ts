@@ -41,3 +41,10 @@ Route.group(() => {
   Route.delete('/user/delete/:id', 'UsersController.delete').middleware('auth')
   Route.put('/user/update/:id', 'UsersController.updateUser').middleware('auth')
 })
+
+
+////////Chef////////
+Route.group(() => {
+  Route.post('/create', 'ChefsController.create').middleware('auth')
+  Route.put('/update/:id', 'ChefsController.update').middleware('auth')
+}).prefix('/chef')
