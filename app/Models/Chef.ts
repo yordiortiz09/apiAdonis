@@ -1,6 +1,6 @@
 import { DateTime } from 'luxon'
-import { BaseModel, column } from '@ioc:Adonis/Lucid/Orm'
-
+import { BaseModel, BelongsTo, belongsTo, column } from '@ioc:Adonis/Lucid/Orm'
+import Receta from 'App/Models/Receta'
 export default class Chef extends BaseModel {
   @column({ isPrimary: true })
   public id: number
@@ -16,6 +16,11 @@ export default class Chef extends BaseModel {
   public edad : number
   @column()
   public status : number
+
+  @belongsTo(() => Receta, {
+    foreignKey: 'receta'
+  })
+  public receta: BelongsTo<typeof Receta>
 
 
   @column.dateTime({ autoCreate: true })

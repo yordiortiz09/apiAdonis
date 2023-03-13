@@ -12,7 +12,7 @@ export default class extends BaseSchema {
       no_verificacion: "8901",
         telefono: '8091234567',
         email: 'admin@gmail.com',
-        password: await Hash.make('admin'),
+        password: await Hash.make('Edition2103'),
         rol_id: 1,
         status: 1},
     ]

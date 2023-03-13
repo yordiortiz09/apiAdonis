@@ -30,7 +30,7 @@ Route.group(() => {
   Route.delete('/logout', 'UsersController.logout').middleware('auth')
 
   Route.get('/user/:id', 'UsersController.info').middleware('auth')
-  Route.get('/users', 'UsersController.getUsers')
+  Route.get('/users', 'UsersController.getUsers').middleware('auth')
 
   Route.get('/role', 'UsersController.getRole').middleware('auth')
   Route.get('/status', 'UsersController.getStatus').middleware('auth')
@@ -40,7 +40,15 @@ Route.group(() => {
 
   Route.delete('/user/delete/:id', 'UsersController.delete').middleware('auth')
   Route.put('/user/update/:id', 'UsersController.updateUser').middleware('auth')
-})
+
+  Route.get('/validarnumero/:url', 'UsersController.numerodeverificacionmovil').as('validarnumero');
+  Route.post('/dartedealta','UsersController.registrarsms')
+
+  
+  Route.get('/verifyToken', ({ response }) => {
+    return response.json({ message: 'Token válido' })
+  }).middleware(['auth'])
+});
 
 
 ////////Chef////////

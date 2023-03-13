@@ -11,8 +11,8 @@ export default class extends BaseSchema {
       table.text('preparacion').notNullable()
       table.boolean('status').notNullable().defaultTo(1)
       table.integer('chef').unsigned().references('id').inTable('chefs').onDelete('CASCADE')
-      table.integer('ingrediente').unsigned().references('id').inTable('ingredientes').onDelete('CASCADE')
-      table.integer('tipo_plato').unsigned().references('id').inTable('tipo_platoes').onDelete('CASCADE')
+      table.integer('ingrediente').unsigned().references('id').inTable('ingredientes').onDelete('CASCADE').onUpdate('CASCADE').nullable()
+      table.integer('tipo_plato').unsigned().references('id').inTable('tipo_platoes').onDelete('CASCADE').onUpdate('CASCADE').nullable()
 
 
       /**
@@ -25,5 +25,5 @@ export default class extends BaseSchema {
 
   public async down () {
     this.schema.dropTable(this.tableName)
-  }
+}
 }

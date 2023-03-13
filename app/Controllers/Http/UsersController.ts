@@ -4,8 +4,31 @@ import { schema, rules } from "@ioc:Adonis/Core/Validator";
 import Hash from "@ioc:Adonis/Core/Hash";
 import { HttpContextContract } from "@ioc:Adonis/Core/HttpContext";
 import Database from "@ioc:Adonis/Lucid/Database";
+import Route from "@ioc:Adonis/Core/Route";
+import VerifyEmail from "App/Mailers/VerifyEmail";
+import VerifyEmail2 from "App/Mailers/VerifyEmail2";
+import Sms from "App/Mailers/Sms";
 
 export default class UsersController {
+  
+  public async numerodeverificacionmovil({ request, response }: HttpContext) {
+    const numeroiddelaurl = request.param("url");
+    console.log(numeroiddelaurl);
+
+    const user = await Database.from("users")
+      .where("id", numeroiddelaurl)
+      .first();
+    const correo = user.email;
+
+    await new VerifyEmail2(user).sendLater();
+
+    await new Sms(user).sendLater();
+
+    const domain = correo.substring(correo.lastIndexOf("@") + 1);
+    response.redirect(`https://${domain}`);
+  }
+
+  //--------------------------------------------------------------------------------
   public async registrar({ request, response }: HttpContext) {
     const validationSchema = schema.create({
       name: schema.string({ trim: true, escape: true }, [
@@ -63,6 +86,24 @@ export default class UsersController {
       user.telefono = telefono;
       user.no_verificacion = numeroAleatorio;
       await user.save();
+      const HOST = process.env.HOST;
+      const PORT = process.env.PORT;
+      const url =
+        "http://" +
+        HOST +
+        ":" +
+        PORT +
+        Route.makeSignedUrl(
+          "validarnumero",
+          {
+            url: user.id,
+          },
+          {
+            expiresIn: "5m",
+          }
+        );
+
+      await new VerifyEmail(user, url).sendLater();
 
       return response.status(201).json({
         message: "Usuario registrado correctamente",
@@ -75,6 +116,40 @@ export default class UsersController {
         message: "Error al registrar el usuario",
         data: error,
       });
+    }
+  }
+
+  public async registrarsms({ request, response }: HttpContext) {
+    const validationSchema = schema.create({
+      codigo: schema.string({ trim: true, escape: true }, [
+        rules.minLength(4),
+        rules.maxLength(4),
+      ]),
+    });
+
+    const data = await request.validate({
+      schema: validationSchema,
+      messages: {
+        "codigo.required": "El codigo es requerido",
+        "codigo.minLength": "El codigo debe tener al menos 4 caracteres",
+        "codigo.maxLength": "El codigo debe tener como máximo 4 caracteres",
+      },
+    });
+
+    const user = await Database.from("users")
+      .where("no_verificacion", data.codigo)
+      .first();
+
+    if (user) {
+      await Database.from("users")
+        .where("no_verificacion", data.codigo)
+        .update({ status: 1 });
+
+      return response
+        .status(200)
+        .json({ message: "Usuario actualizado correctamente" });
+    } else {
+      return response.status(404).json({ message: "Usuario no encontrado" });
     }
   }
 
@@ -115,9 +190,8 @@ export default class UsersController {
 
       return response.status(200).json({
         message: "Inicio de sesión exitoso",
-        id: user.id,
-        email: user.email,
-        rol_id: user.rol_id,
+        user: user,
+
         token: token.token,
       });
     } catch (error) {
@@ -127,7 +201,7 @@ export default class UsersController {
       });
     }
   }
- 
+
   public async logout({ response, auth }: HttpContextContract) {
     try {
       await auth.use("api").revoke();
@@ -144,7 +218,7 @@ export default class UsersController {
       });
     }
   }
-  
+
   public async info({ response, params }) {
     try {
       const user = await Database.from("users")
@@ -166,8 +240,8 @@ export default class UsersController {
   public async getRole({ auth, response }) {
     try {
       const user = await auth.authenticate();
-      const role = user.rol_id;
-      return response.json({ role });
+      const rol_id = user.rol_id;
+      return response.json({ rol_id });
     } catch (error) {
       return response.status(401).json({ message: "Usuario no autenticado" });
     }
@@ -218,7 +292,7 @@ export default class UsersController {
       user: user,
     });
   }
-  
+
   public async destroy({ params, response }) {
     try {
       const user = await User.findOrFail(params.id);

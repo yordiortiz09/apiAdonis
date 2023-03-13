@@ -1,6 +1,8 @@
 import { HttpContextContract } from "@ioc:Adonis/Core/HttpContext";
 import { schema, rules } from "@ioc:Adonis/Core/Validator";
+import Database from "@ioc:Adonis/Lucid/Database";
 import Receta from "App/Models/Receta";
+
 
 export default class RecetasController {
     
@@ -171,7 +173,9 @@ export default class RecetasController {
   }
   public async delete({ params, response }: HttpContextContract) {
     const receta = await Receta.find(params.id);
+    
 
+  
     if (!receta) {
       return response.status(404).json({
         status: 404,
@@ -180,13 +184,17 @@ export default class RecetasController {
         error: null,
       });
     }
-    receta.status = 0;
-    await receta.save();
+ 
+    Database.from("recetas").where("id", params.id).delete();
+
+   
+
     return response.status(200).json({
       status: 200,
       message: "Receta eliminada correctamente",
-      data: receta,
+      data: null,
       error: null,
     });
   }
+  
 }
