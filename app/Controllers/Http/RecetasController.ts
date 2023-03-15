@@ -21,11 +21,11 @@ export default class RecetasController {
       preparacion: schema.string({ trim: true, escape: true }, [
         rules.required(),
         rules.maxLength(255),
-        rules.minLength(3),
+        rules.minLength(10),
       ]),
-      chef: schema.number([rules.required(), rules.range(1, 1000)]),
-      ingrediente: schema.number([rules.required(), rules.range(1, 1000)]),
-      tipo_plato: schema.number([rules.required(), rules.range(1, 1000)]),
+      chef: schema.number([rules.required()]),
+      ingrediente: schema.number([rules.required()]),
+      tipo_plato: schema.number([rules.required()]),
     });
     try {
       const data = await request.validate({

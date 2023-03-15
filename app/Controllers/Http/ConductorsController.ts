@@ -20,7 +20,7 @@ export default class ConductorsController {
         rules.maxLength(40),
         rules.minLength(3),
       ]),
-      edad: schema.number([rules.required(), rules.range(1, 100)]),
+      edad: schema.number([rules.required(), rules.range(18, 70)]),
     });
     try {
       const data = await request.validate({
