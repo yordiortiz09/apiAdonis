@@ -194,6 +194,19 @@ export default class ChefsController {
       data: chef,
     });
   }
+  public async streamChefs({ response }){
+    const stream = response.response;
+    stream.writeHead(200, {
+      "Access-Control-Allow-Origin":"*",
+      "Content-Type": "text/event-stream",
+      "Cache-Control": "no-cache",
+      "Connection": "keep-alive",
+    });
+    Event.on("new::chef", (chef) => {
+      stream.write(`event: newChef\ndata: ${JSON.stringify(chef)}\n\n`);
+      console.log('Se recibió un nuevo chef:', chef);
+    });
+  }
   
  
 }

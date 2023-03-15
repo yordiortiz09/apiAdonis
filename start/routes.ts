@@ -19,7 +19,7 @@
 */
 
 import Route from '@ioc:Adonis/Core/Route'
-import Event from '@ioc:Adonis/Core/Event';
+
 
 
 Route.get('/', async () => {
@@ -27,19 +27,8 @@ Route.get('/', async () => {
 })
 
 Route.group(() => {
-  Route.get('/api/chefs/stream', async ({ response }) => {
-    const stream = response.response;
-    stream.writeHead(200, {
-      "Access-Control-Allow-Origin":"*",
-      "Content-Type": "text/event-stream",
-      "Cache-Control": "no-cache",
-      "Connection": "keep-alive",
-    });
-    Event.on("new::chef", (chef) => {
-      stream.write(`event: newChef\ndata: ${JSON.stringify(chef)}\n\n`);
-      console.log('Se recibió un nuevo chef:', chef);
-    });
-  })
+ 
+
   Route.post('/registrar', 'UsersController.registrar')
   Route.post('/login', 'UsersController.login')
   Route.delete('/logout', 'UsersController.logout').middleware('auth')
@@ -61,8 +50,9 @@ Route.group(() => {
  
   Route.get('/verifyToken', ({ response }) => {
     return response.json({ message: 'Token válido' })
+  })
   }).middleware(['auth', 'status'])
-});
+
 
 Route.group(() => {
 ////////Chef////////
@@ -72,6 +62,7 @@ Route.group(() => {
   Route.get('/info/:id', 'ChefsController.chefInfo').middleware('roles:1,2')
   Route.put('/update/:id', 'ChefsController.update').middleware('roles:1,2')
   Route.delete('/delete/:id', 'ChefsController.delete').middleware('roles:1,2')
+  Route.get('/stream', 'ChefsController.streamChefs')
 }).prefix('/chef').middleware('auth')
 
 
