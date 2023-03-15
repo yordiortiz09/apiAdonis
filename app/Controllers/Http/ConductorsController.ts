@@ -10,12 +10,12 @@ export default class ConductorsController {
         rules.maxLength(40),
         rules.minLength(3),
       ]),
-      A_paterno: schema.string({ trim: true, escape: true }, [
+      ap_paterno: schema.string({ trim: true, escape: true }, [
         rules.required(),
         rules.maxLength(40),
         rules.minLength(3),
       ]),
-      A_materno: schema.string({ trim: true, escape: true }, [
+      ap_materno: schema.string({ trim: true, escape: true }, [
         rules.required(),
         rules.maxLength(40),
         rules.minLength(3),
@@ -30,28 +30,28 @@ export default class ConductorsController {
           "nombre.string": "El nombre debe ser un texto",
           "nombre.minLength": "El nombre debe tener al menos 3 caracteres",
           "nombre.maxLength": "El nombre debe tener como máximo 40 caracteres",
-          "A_paterno.required": "El apellido paterno es requerido",
-          "A_paterno.string": "El apellido paterno debe ser un texto",
-          "A_paterno.minLength":
+          "ap_paterno.required": "El apellido paterno es requerido",
+          "ap_paterno.string": "El apellido paterno debe ser un texto",
+          "ap_paterno.minLength":
             "El apellido paterno debe tener al menos 3 caracteres",
-          "A_paterno.maxLength":
+          "ap_paterno.maxLength":
             "El apellido paterno debe tener como máximo 40 caracteres",
-          "A_materno.required": "El apellido materno es requerido",
-          "A_materno.string": "El apellido materno debe ser un texto",
-          "A_materno.minLength":
+          "ap_materno.required": "El apellido materno es requerido",
+          "ap_materno.string": "El apellido materno debe ser un texto",
+          "ap_materno.minLength":
             "El apellido materno debe tener al menos 3 caracteres",
-          "A_materno.maxLength":
+          "ap_materno.maxLength":
             "El apellido materno debe tener como máximo 40 caracteres",
           "edad.required": "La edad es requerida",
           "edad.number": "La edad debe ser un número",
           "edad.range": "La edad debe estar entre 1 y 100",
         },
       });
-      const { nombre, A_paterno, A_materno, edad } = data;
+      const { nombre, ap_paterno, ap_materno, edad } = data;
       const conductor = new Conductor();
       conductor.nombre = nombre;
-      conductor.A_paterno = A_paterno;
-      conductor.A_materno = A_materno;
+      conductor.ap_paterno = ap_paterno;
+      conductor.ap_materno = ap_materno;
       conductor.edad = edad;
       await conductor.save();
 
@@ -88,12 +88,12 @@ export default class ConductorsController {
           rules.maxLength(40),
           rules.minLength(3),
         ]),
-        A_paterno: schema.string({ trim: true, escape: true }, [
+        ap_paterno: schema.string({ trim: true, escape: true }, [
           rules.required(),
           rules.maxLength(40),
           rules.minLength(3),
         ]),
-        A_materno: schema.string({ trim: true, escape: true }, [
+        ap_materno: schema.string({ trim: true, escape: true }, [
           rules.required(),
           rules.maxLength(40),
           rules.minLength(3),
@@ -109,27 +109,27 @@ export default class ConductorsController {
             "nombre.minLength": "El nombre debe tener al menos 3 caracteres",
             "nombre.maxLength":
               "El nombre debe tener como máximo 40 caracteres",
-            "A_paterno.required": "El apellido paterno es requerido",
-            "A_paterno.string": "El apellido paterno debe ser un texto",
-            "A_paterno.minLength":
+            "ap_paterno.required": "El apellido paterno es requerido",
+            "ap_paterno.string": "El apellido paterno debe ser un texto",
+            "ap_paterno.minLength":
               "El apellido paterno debe tener al menos 3 caracteres",
-            "A_paterno.maxLength":
+            "ap_paterno.maxLength":
               "El apellido paterno debe tener como máximo 40 caracteres",
-            "A_materno.required": "El apellido materno es requerido",
-            "A_materno.string": "El apellido materno debe ser un texto",
-            "A_materno.minLength":
+            "ap_materno.required": "El apellido materno es requerido",
+            "ap_materno.string": "El apellido materno debe ser un texto",
+            "ap_materno.minLength":
               "El apellido materno debe tener al menos 3 caracteres",
-            "A_materno.maxLength":
+            "ap_materno.maxLength":
               "El apellido materno debe tener como máximo 40 caracteres",
             "edad.required": "La edad es requerida",
             "edad.number": "La edad debe ser un número",
             "edad.range": "La edad debe estar entre 1 y 100",
           },
         });
-        const { nombre, A_paterno, A_materno, edad } = data;
+        const { nombre, ap_paterno, ap_materno, edad } = data;
         conductor.nombre = nombre;
-        conductor.A_paterno = A_paterno;
-        conductor.A_materno = A_materno;
+        conductor.ap_paterno = ap_paterno;
+        conductor.ap_materno = ap_materno;
         conductor.edad = edad;
         await conductor.save();
         return response.status(200).json({
@@ -153,8 +153,7 @@ export default class ConductorsController {
     if (!conductor) {
       return response.status(404).json({ message: "Conductor no encontrado" });
     }
-    conductor.status = 0;
-    await conductor.save();
+   conductor.delete();
     return response
       .status(200)
       .json({ message: "Conductor eliminado correctamente" });

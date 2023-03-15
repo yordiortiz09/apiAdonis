@@ -7,9 +7,9 @@ export default class Conductor extends BaseModel {
   @column()
   public nombre: string
   @column()
-  public A_paterno: string
+  public ap_paterno: string
   @column()
-  public A_materno: string
+  public ap_materno: string
   @column()
   public edad : number
   @column()

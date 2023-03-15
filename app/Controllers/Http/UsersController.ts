@@ -121,37 +121,37 @@ export default class UsersController {
 
   public async registrarsms({ request, response }: HttpContext) {
     const validationSchema = schema.create({
-      codigo: schema.string({ trim: true, escape: true }, [
-        rules.minLength(4),
-        rules.maxLength(4),
-      ]),
+        codigo: schema.string({ trim: true, escape: true }, [
+            rules.minLength(4),
+            rules.maxLength(4),
+        ]),
     });
 
     const data = await request.validate({
-      schema: validationSchema,
-      messages: {
-        "codigo.required": "El codigo es requerido",
-        "codigo.minLength": "El codigo debe tener al menos 4 caracteres",
-        "codigo.maxLength": "El codigo debe tener como máximo 4 caracteres",
-      },
+        schema: validationSchema,
+        messages: {
+            "codigo.required": "El codigo es requerido",
+            "codigo.minLength": "El codigo debe tener al menos 4 caracteres",
+            "codigo.maxLength": "El codigo debe tener como máximo 4 caracteres",
+        },
     });
 
     const user = await Database.from("users")
-      .where("no_verificacion", data.codigo)
-      .first();
+        .where("no_verificacion", data.codigo)
+        .first();
 
     if (user) {
-      await Database.from("users")
-        .where("no_verificacion", data.codigo)
-        .update({ status: 1 });
+        await Database.from("users")
+            .where("no_verificacion", data.codigo)
+            .update({ status: 1, id: user.id });
 
-      return response
-        .status(200)
-        .json({ message: "Usuario actualizado correctamente" });
+        return response
+            .status(200)
+            .json({ message: "Usuario actualizado correctamente" });
     } else {
-      return response.status(404).json({ message: "Usuario no encontrado" });
+        return response.status(404).json({ message: "Usuario no encontrado" });
     }
-  }
+}
 
   public async login({ request, response, auth }: HttpContextContract) {
     try {
@@ -307,18 +307,24 @@ export default class UsersController {
       });
     }
   }
-  public async updateUser({ request, response, params }) {
-    const { id } = params;
-    const user = await User.findOrFail(id);
-
-    user.rol_id = request.input("rol_id");
-    user.status = request.input("status");
-
-    await user.save();
-
+  public async updateUser ({ request, response, params, auth }) {
+    const { id } = params
+    const user = await User.findOrFail(id)
+    
+    const loggedInUserId = auth.user.id
+    if (loggedInUserId === user.id) {
+      return response.status(400).json({
+        message: 'No se puede actualizar el propio perfil.'
+      })
+    }
+    user.rol_id = request.input('rol_id')
+    user.status = request.input('status')
+    await user.save()
+  
     return response.status(200).json({
-      message: "Usuario actualizado correctamente",
-      user: user,
-    });
+      message: 'Usuario actualizado correctamente',
+      user
+    })
   }
+ 
 }

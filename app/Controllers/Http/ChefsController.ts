@@ -2,6 +2,8 @@ import { HttpContextContract } from "@ioc:Adonis/Core/HttpContext";
 import { schema, rules } from "@ioc:Adonis/Core/Validator";
 import Database from "@ioc:Adonis/Lucid/Database";
 import Chef from "App/Models/Chef";
+import Event from '@ioc:Adonis/Core/Event';
+
 
 export default class ChefsController {
   public async create({ request, response }: HttpContextContract) {
@@ -59,6 +61,7 @@ export default class ChefsController {
       chef.nacionalidad = nacionalidad;
       chef.edad = edad;
       await chef.save();
+      Event.emit('new::chef', chef);
 
       return response.status(201).json({
         message: "Chef creado correctamente",
@@ -182,8 +185,7 @@ export default class ChefsController {
       });
     }
 
-    chef.status = 0;
-    await chef.save();
+    chef.delete();
 
     return response.status(200).json({
       status: 200,
@@ -192,4 +194,6 @@ export default class ChefsController {
       data: chef,
     });
   }
+  
+ 
 }

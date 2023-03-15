@@ -121,8 +121,7 @@ export default class IngredientesController {
             });
         }
 
-        ingrediente.status = 0;
-        await ingrediente.save();
+      ingrediente.delete();
 
         return response.status(200).json({
             status: 200,

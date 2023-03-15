@@ -18,7 +18,7 @@ export default class Roles {
       await next();
     } catch (error) {
       return response.status(401).json({
-        message: "Debes estar autenticado para realizar esta acción.",
+        message: "Debes estar autentificado para realizar esta acción.",
       });
     }
   }

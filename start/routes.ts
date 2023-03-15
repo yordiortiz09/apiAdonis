@@ -19,12 +19,27 @@
 */
 
 import Route from '@ioc:Adonis/Core/Route'
+import Event from '@ioc:Adonis/Core/Event';
+
 
 Route.get('/', async () => {
   return { hello: 'world' }
 })
 
 Route.group(() => {
+  Route.get('/api/chefs/stream', async ({ response }) => {
+    const stream = response.response;
+    stream.writeHead(200, {
+      "Access-Control-Allow-Origin":"*",
+      "Content-Type": "text/event-stream",
+      "Cache-Control": "no-cache",
+      "Connection": "keep-alive",
+    });
+    Event.on("new::chef", (chef) => {
+      stream.write(`event: newChef\ndata: ${JSON.stringify(chef)}\n\n`);
+      console.log('Se recibió un nuevo chef:', chef);
+    });
+  })
   Route.post('/registrar', 'UsersController.registrar')
   Route.post('/login', 'UsersController.login')
   Route.delete('/logout', 'UsersController.logout').middleware('auth')
@@ -42,15 +57,14 @@ Route.group(() => {
   Route.put('/user/update/:id', 'UsersController.updateUser').middleware('auth')
 
   Route.get('/validarnumero/:url', 'UsersController.numerodeverificacionmovil').as('validarnumero');
-  Route.post('/dartedealta','UsersController.registrarsms')
-
-  
+  Route.post('/validaCode','UsersController.registrarsms')
+ 
   Route.get('/verifyToken', ({ response }) => {
     return response.json({ message: 'Token válido' })
-  }).middleware(['auth'])
+  }).middleware(['auth', 'status'])
 });
 
-
+Route.group(() => {
 ////////Chef////////
 Route.group(() => {
   Route.post('/create', 'ChefsController.create').middleware('roles:1,2')
@@ -59,6 +73,7 @@ Route.group(() => {
   Route.put('/update/:id', 'ChefsController.update').middleware('roles:1,2')
   Route.delete('/delete/:id', 'ChefsController.delete').middleware('roles:1,2')
 }).prefix('/chef').middleware('auth')
+
 
 ////////Platillo////////
 Route.group(() => {
@@ -129,3 +144,5 @@ Route.group(() => {
   Route.delete('/delete/:id', 'HospitalsController.delete').middleware('roles:1,2')
 }
 ).prefix('/hospital').middleware('auth')
+}).middleware('status')
+
