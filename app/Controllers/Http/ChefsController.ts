@@ -61,7 +61,7 @@ export default class ChefsController {
       chef.nacionalidad = nacionalidad;
       chef.edad = edad;
       await chef.save();
-      Event.emit('new::chef', chef);
+      Event.emit('Chef', chef);
 
       return response.status(201).json({
         message: "Chef creado correctamente",
@@ -154,6 +154,7 @@ export default class ChefsController {
         chef.edad = edad;
 
         await chef.save();
+        Event.emit('Chef', chef);
 
         return response.status(200).json({
           message: "Chef actualizado correctamente",
@@ -186,6 +187,7 @@ export default class ChefsController {
     }
 
     chef.delete();
+    Event.emit('Delete', chef);
 
     return response.status(200).json({
       status: 200,
@@ -202,11 +204,16 @@ export default class ChefsController {
       "Cache-Control": "no-cache",
       "Connection": "keep-alive",
     });
-    Event.on("new::chef", (chef) => {
-      stream.write(`event: newChef\ndata: ${JSON.stringify(chef)}\n\n`);
+    
+    Event.on("Chef", (chef) => {
+      stream.write(`event: Chef\ndata: ${JSON.stringify(chef)}\n\n`);
       console.log('Se recibió un nuevo chef:', chef);
-    });
+    });  
+    Event.on("Delete", (chef) => {
+      stream.write(`event: Delete\ndata: ${JSON.stringify(chef)}\n\n`);
+      console.log('Se eliminó un chef:', chef);
+    })
+   
   }
-  
  
 }
